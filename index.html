@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style.css">
+    <script src="https://kit.fontawesome.com/3c5f1c2528.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');</style>
+    
+    
+    <title>Music Player</title>
+
+</head>
+
+
+
+<body>
+    <!-- Container -->
+    <div class="flex items-center justify-center text-center flex-wrap w-[100%] h-[100vh] px-20">
+
+        <!-- Music Player -->
+        <div class="bg-gray-100  w-[450px] px-[40px] py-[40px] text-center rounded-3xl opacity-80">
+
+            <!-- Thumbnail -->
+            <div class="flex flex-row ">
+                <img class="w-64 z-10 shadow-md rounded-md" src="/imgs/taylor.png">
+                <img class="w-64 relative left-[-150px]" src="/imgs/record.png" alt="">
+            </div>
+            <div class="pt-10 text-center">
+                <h1 class="text-[20px] font-bold">All Too Well (Taylor Swift's Version)</h1>
+                <p class="text-[17px]">Taylor Swift</p>
+            </div>
+
+            <!-- Audio Controls -->
+            <div class="pt-16">
+                <audio id="song">
+                    <source src="/imgs/audio/All Too Well (10 Minute Version) (Taylor's Version) (From The Vault) (Lyric Video).mp3" type="audio/mpeg">
+                </audio>
+                <div class="flex justify-between ">
+                    <div class="currentTime">00:00</div>
+                    <div class="totalDuration">00:00</div>
+                </div>
+                <input type="range" min="1" max="100" value="0" id="progress" class="seekSlider" onchange="seekTo()">
+                
+                
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex justify-evenly items-center pt-10">
+                <!-- Prev Button -->
+                <button onclick="prevButton()" class=" previous inline-flex items-center justify-center  text-6xl"><i class="fa-solid fa-backward-step" style="color: #a05371;"></i></button>
+
+                <!-- Play Button -->
+                <button onclick="playPause()" class=" play w-28 h-28 m-[2px] text-gray-200 shadow-inner inline-flex items-center justify-center text-6xl rounded-full shadow-xl" style="background: #67255D; "><i id="ctrlIcon" class="fa-solid fa-play" style="box-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.05)" ></i></button>
+
+                <!-- Next Button -->
+                <button onclick="nextButton()" class="next inline-flex items-center justify-center  text-6xl"><i class="fa-solid fa-forward-step" style="color: #a05374;"></i></div>
+                </button>
+
+
+            
+
+
+        </div>
+
+       
+        
+    </div>
+
+    <!-- JAVASCRIPT -->
+
+    <script>
+        
+        let progress = document.getElementById("progress");
+        let song = document.getElementById("song");
+        let ctrlIcon = document.getElementById("ctrlIcon");
+        let seekSlider = document.querySelector(".seekSlider");
+        let currTime = document.querySelector(".currentTime");
+        let totalDuration = document.querySelector(".totalDuration");
+
+        song.onloadedmetadata = function(){
+            progress.max = song.duration;
+            progress.value = song.currentTime;
+        }
+
+        // CONTROL BUTTONS
+        function playPause(){
+            if(ctrlIcon.classList.contains("fa-pause")){
+                song.pause();
+                ctrlIcon.classList.remove("fa-pause");
+                ctrlIcon.classList.add("fa-play");
+            }
+            else{
+                song.play();
+                ctrlIcon.classList.add("fa-pause");
+                ctrlIcon.classList.remove("fa-play");
+            }
+        }
+
+        if(song.play()){
+            setInterval(()=>{
+                progress.value = song.currentTime
+            },500);
+        }
+
+        progress.onchange = function(){
+            song.play();
+            song.currentTime = progress.value;
+            ctrlIcon.classList.add("fa-pause");
+            ctrlIcon.classList.remove("fa-play");
+        }
+
+
+
+        song.addEventListener('timeupdate', () => {
+            let currentTime = song.currentTime;
+            let duration = song.duration;
+
+            let currentMinutes = Math.floor(currentTime / 60);
+            let currentSeconds = Math.floor(currentTime % 60);
+            let durationMinutes = Math.floor(duration / 60);
+            let durationSeconds = Math.floor(duration % 60);
+
+            if (currentSeconds < 10) {
+                currentSeconds = '0' + currentSeconds;
+            }
+            if (durationSeconds < 10) {
+                durationSeconds = '0' + durationSeconds;
+            }
+
+            currTime.textContent = `${currentMinutes}:${currentSeconds}`;
+            totalDuration.textContent = `${durationMinutes}:${durationSeconds}`;
+        });
+
+
+    </script>
+     
+</body>
+</html>
